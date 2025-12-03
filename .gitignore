@@ -53,3 +53,4 @@ capture/
 /file-to-upload.txt
 /Plugin.java
 /big-entity.txt
+/data-*.xml
