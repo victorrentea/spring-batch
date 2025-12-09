@@ -62,7 +62,7 @@ public class BatchApp {
   @Bean
   public Step importPersonData() {
     return new StepBuilder("importPersonData", jobRepository)
-        .<PersonXml, Person>chunk(5,transactionManager)
+        .<PersonXml, Person>chunk(50,transactionManager)
         // ⭐️ SpBatch COMMITs after each chunk
         // => ⚠️ in your code, DON'T loose the transaction:
         // - ❌ @Transactional(propagation=
@@ -84,7 +84,7 @@ public class BatchApp {
         //      => do first INSERT, then DELETE when job successful
 
         .reader(xmlReader(null)) // [E]xtract: 1 IN object from < .xls .csv .jsonl
-        .processor(personProcessor()) // [T]ransform: convert 1 IN to 1 OUT (your code)
+        .processor(personProcessor()) // [T]ransform: validate, convert 1 IN to 1 OUT @Entity (your custom code)
         .writer(jpaWriter(null)) // [L]oad: N OUT objects to > jdbc, mongo, file.. = write(List<Out>)
 
         .listener(new LogSqlForFirstChunkListener())
