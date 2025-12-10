@@ -85,7 +85,7 @@ public class BatchApp {
         //      => do first INSERT, then DELETE when job successful
 
         .reader(xmlReader(null)) // [E]xtract: 1 IN object from < .xls .csv .jsonl
-        .processor(personProcessor()) // [T]ransform: validate, convert 1 IN to 1 OUT @Entity (your custom code)
+            .processor(personProcessor()) // [T]ransform: validate, convert 1 IN to 1 OUT @Entity (your custom code)
         .writer(jpaWriter(null)) // [L]oad: N OUT objects to > jdbc, mongo, file.. = write(List<Out>)
 
         .listener(new LogSqlForFirstChunkListener())
