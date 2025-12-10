@@ -53,16 +53,17 @@ public class BatchApp {
 //        .next(verifyFileChecksum())
 //        .next(disableDBIndexes()) // re-enabled after end, hoping you don't have concurrent users/jobs/mid-way SELECTs
 
-        .start(importPersonData())
+//        .start(importPersonData())
 
-//        .start(importCityData()).next(importPersonData()) // TODO 2-pass import
+        .start(importCityData())
+        .next(importPersonData()) // TODO 2-pass import
         .build();
   }
 
   @Bean
   public Step importPersonData() {
     return new StepBuilder("importPersonData", jobRepository)
-        .<PersonXml, Person>chunk(50,transactionManager)
+        .<PersonXml, Person>chunk(3,transactionManager)
         // ⭐️ SpBatch COMMITs after each chunk
         // => ⚠️ in your code, DON'T loose the transaction:
         // - ❌ @Transactional(propagation=
